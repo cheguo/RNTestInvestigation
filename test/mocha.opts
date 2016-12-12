@@ -1,0 +1,4 @@
+./unittests
+--recursive
+--require react-native-mock/mock.js
+--compilers js:babel-core/register
