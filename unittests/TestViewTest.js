@@ -12,7 +12,7 @@ describe("#React Native UnitTest", () => {
         it("Initially text it 'Text'", () => {
             const wrapper = shallow(<TestView />);
 
-            Chai.expect(wrapper.find(Text)).to.have.length(1);
+            Chai.expect(wrapper.find(Text)).to.have.length(2);
 
             Chai.expect(wrapper.contains(<Text>Text</Text>)).to.equal(true);
         });

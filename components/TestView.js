@@ -24,6 +24,7 @@ export class TestView extends React.Component {
     render() {
         return (
             <View>
+                <Text>Hello</Text>
                 <Text>{this.state.titleText}</Text>
                 <Button
                     onPress={ this.onChangeText }

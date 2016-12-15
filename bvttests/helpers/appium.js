@@ -1,4 +1,3 @@
-// #IPROMISE -----------------
 require('babel-polyfill');
 
 var chai = require("chai");
@@ -18,6 +17,7 @@ var timeoutTime = 300000;
 
 var resetSimulator = function(callback) {
   if (!rootDriver) {
+      console.log("no driver");
     callback(true);
     return;
   }
@@ -29,35 +29,8 @@ var resetSimulator = function(callback) {
       try {
         // best-case first
         // reset data
-        yield rootDriver.elementById('ResetTest').click();
+        yield rootDriver.elementById('Hello');
         break;
-      }
-      catch (e) { }
-
-      try {
-        // if on crashed (red) app
-        yield rootDriver.elementById('redbox-reload').click();
-      }
-      catch (e) { }
-
-      try {
-        // is there an alert?
-        yield rootDriver.elementByName('OK').click();
-      }
-      catch (e) { }
-
-      try {
-        // now does it work?
-        // reset data
-        yield rootDriver.elementById('ResetTest').click();
-        break;
-      }
-      catch (e) { }
-
-      try {
-        // ok, fine. shake it and click reload
-        yield rootDriver.shake();
-        yield rootDriver.elementById('Reload').click();
       }
       catch (e) { }
 
@@ -135,7 +108,7 @@ var testCount = 0;
 beforeEach(function (done) {
   this.timeout(timeoutTime);
   testCount++;
-  // console.log("before each: " + testCount);
+
   console.log("beforeEach");
   resetSimulator(function(error) {
     if (error) {
@@ -164,7 +137,6 @@ afterEach(function(done) {
   this.timeout(timeoutTime);
   console.log("afterEach");
   allPassed = allPassed && this.currentTest.state === 'passed';
-  localServer.after();
 
   if (resetEachTime) {
     quitSimulator(function() {

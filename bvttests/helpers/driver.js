@@ -1,19 +1,18 @@
 require('./packager');
+var path = require("path");
 
 // APPIUM -----------------
 var child_process = require('child_process');
 var appiumProc    = child_process.spawn('appium', [
-  '-p', '4724',
+  '-p', '4725',
   '--default-capabilities', '{"fullReset":true}'
 ]);
-
-console.log(appiumProc);
 
 var Promise = require('Promise');
 
 var server = {
   host: 'localhost',
-  port: 4724 // one off from normal
+  port: 4725 // one off from normal
 };
 
 // {
@@ -49,29 +48,35 @@ process.on('exit', function () {
 
 var realWd = require("wd");
 var wd     = require("yiewd");
+var color  = require('colors');
 
 // Config for Appium
 
 var UNLIMITED = 100000;
 
+console.log(path.isAbsolute(path.resolve(process.cwd() ,"testbuild/test_ios/testest_ios.zip")));
+
 var caps = {
   browserName: '',
-  'appium-version': '1.6.2',
+  appiumVersion: '1.6.3',
   automationName: "xcuitest",
   platformName: 'iOS',
   platformVersion: '10.1',
   deviceName: 'iPhone 6s',
   autoLaunch: 'true',
   newCommandTimeout: UNLIMITED,
-  app: process.cwd() + "/testbuild/test_ios/testest_ios.zip"
+  app: path.resolve(process.cwd() ,"testbuild/test_ios/testest_ios.zip")
 };
+
+
 
 module.exports = function(callback) {
   console.log("DRIVER: starting it up");
 
   appiumPromise.then(function () {
     console.log("DRIVER: will init");
-    driver = wd.remote(server);
+
+    var driver = wd.remote(server);
 
     driver.on('status', function(info) {
       console.log(info.cyan);
@@ -80,27 +85,7 @@ module.exports = function(callback) {
       console.log(' > ' + meth.yellow, path.grey, data || '');
     });
 
-    current = {};
-
-    handler = function(error, el){
-      if (error) {
-        console.log('error', error);
-      }
-      else if(typeof el === 'object'){
-        console.log("Returned in current");
-        current = el;
-      }
-      else {
-        console.log("Returned following string", el);
-      }
-
-    };
-
-    quit = function(){
-      driver.quit(function(){
-        process.exit(1);
-      });
-    };
+    var current = {};
 
     driver.init(caps, function(){
       console.log('driver started');
